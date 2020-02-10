@@ -1,19 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
+# Predictive Modeling
 
-# # Predictive Modeling
-
-# ## Building a linear classifier using Support Vector Machine (SVMs)
-
-# In[ ]:
-
-
+# Building a linear classifier using Support Vector Machine (SVMs)
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# In[ ]:
-
 
 def load_data(input_file):
     X = []
@@ -29,23 +18,11 @@ def load_data(input_file):
     
     return X, y
 
-
-# In[ ]:
-
-
 input_file = 'datasets/data_multivar_ch3.txt'
 X, y = load_data(input_file)
 
-
-# In[ ]:
-
-
 class_0 = np.array([X[i] for i in range(len(X)) if y[i]==0])
 class_1 = np.array([X[i] for i in range(len(X)) if y[i]==1])
-
-
-# In[ ]:
-
 
 plt.figure()
 plt.scatter(class_0[:,0], class_0[:,1], facecolors='black', edgecolors='black', marker='s')
@@ -53,35 +30,15 @@ plt.scatter(class_1[:,0], class_1[:,1], facecolors='None', edgecolors='black', m
 plt.title('Input data')
 plt.show()
 
-
-# In[ ]:
-
-
 from sklearn import model_selection
 from sklearn.svm import SVC
 
-
-# In[ ]:
-
-
 X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.25, random_state=5)
-
-
-# In[ ]:
-
 
 params = {'kernel': 'linear'}
 classifier = SVC(**params)
 
-
-# In[ ]:
-
-
 classifier.fit(X_train, y_train)
-
-
-# In[ ]:
-
 
 # Plot the classifier boundaries on input data
 def plot_classifier(classifier, X, y, title='Classifier boundaries', annotate=False):
@@ -136,29 +93,14 @@ def plot_classifier(classifier, X, y, title='Classifier boundaries', annotate=Fa
                 arrowprops = dict(arrowstyle = '-', connectionstyle = 'arc3,rad=0'))
 
 
-# In[ ]:
-
-
 plot_classifier(classifier, X_train, y_train, 'Training dataset')
 plt.show()
-
-
-# In[ ]:
-
 
 y_test_pred = classifier.predict(X_test)
 plot_classifier(classifier, X_test, y_test, 'Test dataset')
 plt.show()
 
-
-# In[ ]:
-
-
 from sklearn.metrics import classification_report
-
-
-# In[ ]:
-
 
 target_names = ['Class-' + str(int(i)) for i in set(y)]
 print("#"*60)
@@ -166,71 +108,35 @@ print("Classifier performance on training dataset")
 print(classification_report(y_train, classifier.predict(X_train), target_names=target_names))
 print("#"*60)
 
-
-# In[ ]:
-
-
 print("#"*60)
 print("Classification report on test dataset")
 print(classification_report(y_test, y_test_pred, target_names=target_names))
 print("#"*60)
 
 
-# ## Building a nonlinear classifier using SVMs
-
-# In[ ]:
-
-
+# Building a nonlinear classifier using SVMs
 params = {'kernel': 'poly', 'degree': 3}
 classifier = SVC(**params)
 
-
-# In[ ]:
-
-
 classifier.fit(X_train, y_train)
-
-
-# In[ ]:
-
 
 y_test_pred = classifier.predict(X_test)
 plot_classifier(classifier, X_test, y_test, 'Test dataset')
 plt.show()
 
-
-# In[ ]:
-
-
 print("#"*60)
 print("Classification report on test dataset")
 print(classification_report(y_test, y_test_pred, target_names=target_names))
 print("#"*60)
-
-
-# In[ ]:
-
 
 params = {'kernel': 'rbf'}
 classifier = SVC(**params)
 
-
-# In[ ]:
-
-
 classifier.fit(X_train, y_train)
-
-
-# In[ ]:
-
 
 y_test_pred = classifier.predict(X_test)
 plot_classifier(classifier, X_test, y_test, 'Test dataset')
 plt.show()
-
-
-# In[ ]:
-
 
 print("#"*60)
 print("Classification report on test dataset")
@@ -238,24 +144,12 @@ print(classification_report(y_test, y_test_pred, target_names=target_names))
 print("#"*60)
 
 
-# ## Tackling class imbalance
-
-# In[ ]:
-
-
+# Tackling class imbalance
 input_file = 'datasets/data_multivar_imbalance.txt'
 X, y = load_data(input_file)
 
-
-# In[ ]:
-
-
 class_0 = np.array([X[i] for i in range(len(X)) if y[i]==0])
 class_1 = np.array([X[i] for i in range(len(X)) if y[i]==1])
-
-
-# In[ ]:
-
 
 plt.figure()
 plt.scatter(class_0[:,0], class_0[:,1], facecolors='black', edgecolors='black', marker='s')
@@ -263,66 +157,30 @@ plt.scatter(class_1[:,0], class_1[:,1], facecolors='None', edgecolors='black', m
 plt.title('Input data')
 plt.show()
 
-
-# In[ ]:
-
-
 X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.25, random_state=5)
-
-
-# In[ ]:
-
 
 params = {'kernel': 'linear'}
 classifier = SVC(**params)
 
-
-# In[ ]:
-
-
 classifier.fit(X_train, y_train)
-
-
-# In[ ]:
-
 
 y_test_pred = classifier.predict(X_test)
 plot_classifier(classifier, X_test, y_test, 'Test dataset')
 plt.show()
 
-
-# In[ ]:
-
-
 print("#"*60)
 print("Classification report on test dataset")
 print(classification_report(y_test, y_test_pred, target_names=target_names))
 print("#"*60)
-
-
-# In[ ]:
-
 
 params = {'kernel': 'linear', 'class_weight': 'balanced'}
 classifier = SVC(**params)
 
-
-# In[ ]:
-
-
 classifier.fit(X_train, y_train)
-
-
-# In[ ]:
-
 
 y_test_pred = classifier.predict(X_test)
 plot_classifier(classifier, X_test, y_test, 'Test dataset')
 plt.show()
-
-
-# In[ ]:
-
 
 print("#"*60)
 print("Classification report on test dataset")
@@ -330,26 +188,15 @@ print(classification_report(y_test, y_test_pred, target_names=target_names))
 print("#"*60)
 
 
-# ## Finding optimal hyperparameters
-
-# In[ ]:
-
+# Finding optimal hyperparameters
 
 input_file = 'datasets/data_multivar_ch3.txt'
 X, y = load_data(input_file)
 X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.25, random_state=5)
 
-
-# In[ ]:
-
-
 parameter_grid = [{'kernel': ['linear'], 'C': [1, 10, 50, 600]},
                   {'kernel': ['poly'], 'degree': [2, 3]},
                   {'kernel': ['rbf'], 'gamma': [0.01, 0.001], 'C': [1, 10, 50, 600]}]
-
-
-# In[ ]:
-
 
 metrics = ['precision', 'recall_weighted']
 for metric in metrics:
@@ -363,25 +210,14 @@ for metric in metrics:
         
     print("\nHighest scoring parameter set:", classifier.best_params_)
 
-
-# In[ ]:
-
-
 y_true, y_pred = y_test, classifier.predict(X_test)
 print("\nFull performance report:\n")
 print(classification_report(y_true, y_pred))
 
 
-# ## Building an event predictor
-
-# In[ ]:
-
+# Building an event predictor
 
 from sklearn import preprocessing
-
-
-# In[ ]:
-
 
 input_file = 'datasets/calit2/building_event_binary.txt'
 X = []
@@ -393,10 +229,6 @@ with open(input_file, 'r') as f:
 
 X = np.array(X)
 
-
-# In[ ]:
-
-
 label_encoder = []
 X_encoded = np.empty(X.shape)
 for i,item in enumerate(X[0]):
@@ -409,38 +241,18 @@ for i,item in enumerate(X[0]):
 X = X_encoded[:, :-1].astype(int)
 y = X_encoded[:, -1].astype(int)
 
-
-# In[ ]:
-
-
 params = {'kernel': 'rbf', 'probability': True, 'class_weight': 'balanced'}
 classifier = SVC(**params)
 classifier.fit(X, y)
-
-
-# In[ ]:
-
 
 accuracy = model_selection.cross_val_score(classifier, X, y, scoring='accuracy', cv=3)
 print("Accuracy of the classifier: " + str(round(100*accuracy.mean(), 2)) + "%")
 
 
-# ## Estimating traffic
-
-# In[ ]:
-
-
+# Estimating traffic
 from sklearn.svm import SVR
 
-
-# In[ ]:
-
-
 input_file = 'datasets/traffic_data.txt'
-
-
-# In[ ]:
-
 
 X = []
 count = 0
@@ -451,10 +263,6 @@ with open(input_file, 'r') as f:
         
 X = np.array(X)
 
-
-# In[ ]:
-
-
 label_encoder = []
 X_encoded = np.empty(X.shape)
 for i,item in enumerate(X[0]):
@@ -467,24 +275,11 @@ for i,item in enumerate(X[0]):
 X = X_encoded[:, :-1].astype(int)
 y = X_encoded[:, -1].astype(int)
 
-
-# In[ ]:
-
-
 params = {'kernel': 'rbf', 'C': 10.0, 'epsilon': 0.2}
 regressor = SVR(**params)
 regressor.fit(X, y)
 
-
-# In[ ]:
-
-
 import sklearn.metrics as sm
-
-
-# In[ ]:
-
 
 y_pred = regressor.predict(X)
 print("Mean absolute error =", round(sm.mean_absolute_error(y, y_pred), 2))
-
